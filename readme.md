@@ -1,15 +1,16 @@
 # Trailing sdta chunk (TSC) mode specification
 
-# Version 1.00.1 (Draft specification)
+# Version 1.0.2 (Draft specification)
 
 Copyright © 2024 sylvia-leaf
 
 ## 0.1 Revision history
 
-|          |                      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|----------|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Revision | Date                 | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| 1.00.1   | October 17, 2024     | First version <br> Specification based on SFe 4.00.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|          |                      |                                                           |
+|----------|----------------------|-----------------------------------------------------------|
+| Revision | Date                 | Description                                               |
+| 1.0.2    | November 19, 2024    | Versioning update <br> Added SFty subchunk information    |
+| 1.0.1    | October 17, 2024     | First version <br> Specification based on SFe 4.00.5      |
 
 * * *
 
@@ -41,7 +42,6 @@ The table of contents is currently not implemented.
 
 - This is a draft specification for TSC mode for legacy SF and SFe.
 
-
 ## 1.2 Organisation of this document
 
 The organisation of the document is similar to that of the SFe document (and thus also SFSPEC24.PDF), but adapted to the requirements of the TSC specification.
@@ -62,9 +62,15 @@ As Saga of OpenMPT has found out, it is in fact possible to increase the maximum
 - When TSC mode is on, up to 8 GiB of the SFe32 file can be loaded.
 - No SF file that uses TSC will have exactly 8 GiB. The size of the sdta-list chunk, which contains the sample data, is still limited to 4 GiB.
 
-## 2.3 ISFe chunk feature flag
+## 2.3 SFty sub-chunk information
 
-We are planning to define the feature flag system in the ISFe sub-chunk for SFe players in specification milestone 4.00.10. But for now, this is left empty for now. 
+The `ISFe-info` sub-chunk in an SFe bank contains two sub-chunks that contain data related to TSC. Because TSC can be used with legacy SF, the absence of an `ISFe-info` sub-chunk does not mean that a TSC bank is invalid. 
+
+The `SFty` sub-chunk found inside the `ISFe-info` sub-chunk can have the values `SFe32 with TSC` or `SFe32L with TSC`. This tells an SFe-capable program that the `sdta-info` chunk is the last chunk. 
+
+If the program can handle such a bank, then it should assume that `sdta-info` is at the end.
+
+If the program cannot, then it should reject the file as unsupported (but not Structurally Unsound if it is a syntactically valid SFe32 with TSC bank). All SFe players must recognise the above values and respond accordingly.
 
 # Section 3: Compatibility specification
 
