@@ -1,16 +1,17 @@
 # Trailing sdta chunk (TSC) mode specification
 
-# Version 1.0.2 (Draft specification)
+# Version 1.0.3 (Draft specification)
 
-Copyright © 2024 sylvia-leaf
+Copyright © 2024 SFe Team
 
 ## 0.1 Revision history
 
-|          |                      |                                                           |
-|----------|----------------------|-----------------------------------------------------------|
-| Revision | Date                 | Description                                               |
-| 1.0.2    | November 19, 2024    | Versioning update <br> Added SFty subchunk information    |
-| 1.0.1    | October 17, 2024     | First version <br> Specification based on SFe 4.00.5      |
+|          |                      |                                                                  |
+|----------|----------------------|------------------------------------------------------------------|
+| Revision | Date                 | Description                                                      |
+| 1.0.3    | November 26, 2024    | Updated versioning and SFty subchunk information <br> fixed name |
+| 1.0.2    | November 19, 2024    | Versioning update <br> Added SFty subchunk information           |
+| 1.0.1    | October 17, 2024     | First version <br> Specification based on SFe 4.00.5             |
 
 * * *
 
@@ -20,7 +21,7 @@ This isn't an integral part of the SFe specification. This is a supplementary sp
 
 This is a draft. Expect errors, and feel free to report them. sleaf has access to a computer with an Sound Blaster X-Fi Titanium, so she will be able to test or reproduce any issues found on real hardware.
 
-Do not use "draft" specifications (version number x.yy.zL) to base final products on. Always refer to a "final" specification (version number x.yyL).
+Do not use "draft" specifications (version number x.y.zL) to base final products on. Always refer to a "final" specification (version number x.yL).
 
 * * *
 
@@ -44,7 +45,7 @@ The table of contents is currently not implemented.
 
 ## 1.2 Organisation of this document
 
-The organisation of the document is similar to that of the SFe document (and thus also SFSPEC24.PDF), but adapted to the requirements of the TSC specification.
+The organisation of the document is similar to that of the SFe document (and thus also `SFSPEC24.PDF`), but adapted to the requirements of the TSC specification.
 
 ## 1.3 Improvements and enhancements
 
@@ -54,7 +55,7 @@ The TSC specification will go through a few draft milestones, after which the sp
 
 ## 2.1 What is TSC mode?
 
-As Saga of OpenMPT has found out, it is in fact possible to increase the maximum size of the 32-bit SF 2.04 format to 8 gibibytes (GiB), if the sdta chunk is placed at the end of the file rather than in the middle as usual for SF 2.04. This is referred to in this specification as trailing sdta chunk mode, or TSC mode for short.
+As sagamusix of OpenMPT has found out, it is in fact possible to increase the maximum size of the 32-bit SF 2.04 format to 8 gibibytes (GiB), if the sdta chunk is placed at the end of the file rather than in the middle as usual for SF 2.04. This is referred to in this specification as trailing sdta chunk mode, or TSC mode for short.
 
 ## 2.2 Use of TSC mode
 
@@ -66,19 +67,19 @@ As Saga of OpenMPT has found out, it is in fact possible to increase the maximum
 
 The `ISFe-info` sub-chunk in an SFe bank contains two sub-chunks that contain data related to TSC. Because TSC can be used with legacy SF, the absence of an `ISFe-info` sub-chunk does not mean that a TSC bank is invalid. 
 
-The `SFty` sub-chunk found inside the `ISFe-info` sub-chunk can have the values `SFe32 with TSC` or `SFe32L with TSC`. This tells an SFe-capable program that the `sdta-info` chunk is the last chunk. 
+The `SFty` sub-chunk found inside the `ISFe-info` sub-chunk can have the values `SFe-static with TSC` or `SFe-static (8-bit) with TSC`. This tells an SFe-capable program that the `sdta-info` chunk is the last chunk. 
 
 If the program can handle such a bank, then it should assume that `sdta-info` is at the end.
 
-If the program cannot, then it should reject the file as unsupported (but not Structurally Unsound if it is a syntactically valid SFe32 with TSC bank). All SFe players must recognise the above values and respond accordingly.
+If the program cannot, then it should reject the file as unsupported (but not Structurally Unsound if it is a syntactically valid SFe-static with TSC bank). All SFe players must recognise the above values and respond accordingly.
 
 # Section 3: Compatibility specification
 
 ## 3.1 TSC mode compatibility concerns
 
-Such files will not work with all legacy SF players, including sound cards. Therefore, we strongly recommend that you use SFe64 (or SFe64L) rather than TSC mode.
+Such files will not work with all legacy SF players, including sound cards. Therefore, we strongly recommend that you use RIFF64 headers rather than TSC mode.
 
-Saga also warns against using TSC mode due to compatibility concerns.
+sagamusix also warns against using TSC mode due to compatibility concerns.
 
 ## 3.2 TSC requirements for SFe programs
 
@@ -88,4 +89,4 @@ SFe players not compatible with TSC should automatically detect a file size abov
 
 ## 3.3 Assuming TSC mode for supported programs
 
-If an SF player that supports TSC attempts to load a bank larger than 4 GiB, and a 32-bit header is found, then TSC mode is assumed. 
+If an SF player that supports TSC attempts to load a bank larger than 4 GiB, and a 32-bit RIFF header is found, then TSC mode is assumed. 
